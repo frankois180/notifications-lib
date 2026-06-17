@@ -8,11 +8,11 @@ public final class NoOpEventPublisher implements NotificationEventPublisher {
 
     @Override
     public void onSuccess(NotificationResult result) {
-        // no-op
+
     }
 
     @Override
     public void onFailure(Notification notification, Throwable error) {
-        // no-op
+
     }
 }
