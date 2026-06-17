@@ -21,10 +21,12 @@ import com.notifications.providers.slack.SlackWebhookProvider;
 import com.notifications.providers.sms.TwilioProvider;
 import com.notifications.result.NotificationResult;
 import com.notifications.template.SimpleTemplateEngine;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public final class NotificationExamples {
 
     private static final String SLACK_WEBHOOK = "https://hooks.slack.com/services/T000/B000/XXXXXXXX";
@@ -59,7 +61,7 @@ public final class NotificationExamples {
                         "code", "123456"
                 )))
                 .eventPublisher(new DefaultEventPublisher(event ->
-                        System.out.println("Event -> " + event.type() + " | " + event.message())
+                        log.info("Event -> {} | {}", event.type(), event.message())
                 ))
                 .build();
 
@@ -90,10 +92,10 @@ public final class NotificationExamples {
                 "deployments"
         ));
 
-        System.out.println("Email: " + emailResult);
-        System.out.println("SMS: " + smsResult);
-        System.out.println("Push: " + pushResult);
-        System.out.println("Slack: " + slackResult);
+        log.info("Email: {}", emailResult);
+        log.info("SMS: {}", smsResult);
+        log.info("Push: {}", pushResult);
+        log.info("Slack: {}", slackResult);
 
         List<Notification> batch = List.of(
                 new EmailNotification(
@@ -116,7 +118,9 @@ public final class NotificationExamples {
         );
 
         List<NotificationResult> batchResults = client.sendBatchAsync(batch).get();
-        System.out.println("Batch async results: " + batchResults.size());
-        batchResults.forEach(result -> System.out.println("  - " + result.channel() + " via " + result.providerName()));
+        log.info("Batch async results: {}", batchResults.size());
+        batchResults.forEach(result ->
+                log.info("  - {} via {}", result.channel(), result.providerName())
+        );
     }
 }
